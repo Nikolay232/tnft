@@ -1,0 +1,300 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "setBasisCode",
+			"inputs": [
+				{"name":"code","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setDataCode",
+			"inputs": [
+				{"name":"code","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setIndexCode",
+			"inputs": [
+				{"name":"code","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setNFTRoot",
+			"inputs": [
+				{"name":"addr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getDebotInfo",
+			"id": "0xDEB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"name","type":"string"},
+				{"name":"version","type":"string"},
+				{"name":"publisher","type":"string"},
+				{"name":"key","type":"string"},
+				{"name":"author","type":"string"},
+				{"name":"support","type":"address"},
+				{"name":"hello","type":"string"},
+				{"name":"language","type":"string"},
+				{"name":"dabi","type":"string"},
+				{"name":"icon","type":"bytes"}
+			]
+		},
+		{
+			"name": "getRequiredInterfaces",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"interfaces","type":"uint256[]"}
+			]
+		},
+		{
+			"name": "start",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "mainMenu",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "restart",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "checkContract",
+			"inputs": [
+				{"name":"addr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "checkRootContract",
+			"inputs": [
+				{"name":"acc_type","type":"int8"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployNft",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "nftParamsInputOwnerAddress",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "nftParamsSetOwnerAddress",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "nftParamsSetComment",
+			"inputs": [
+				{"name":"value","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "nftParamsSetComment1",
+			"inputs": [
+				{"name":"value","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "nftParamsSetComment2",
+			"inputs": [
+				{"name":"value","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "nftParamsSetComment3",
+			"inputs": [
+				{"name":"value","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployNftStep1",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployNftStep2",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployNftStep3",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployNftStep4",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onNftDeploySuccess",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "resolveNftDataAddr",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "resolveNftAddr",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onError",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "attachMultisig",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "saveMultisig",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setKeyHandle",
+			"inputs": [
+				{"name":"handle","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "upgrade",
+			"inputs": [
+				{"name":"state","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getDebotOptions",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"options","type":"uint8"},
+				{"name":"debotAbi","type":"string"},
+				{"name":"targetAbi","type":"string"},
+				{"name":"targetAddr","type":"address"}
+			]
+		},
+		{
+			"name": "setABI",
+			"inputs": [
+				{"name":"dabi","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"m_options","type":"uint8"},
+		{"name":"m_debotAbi","type":"optional(string)"},
+		{"name":"m_targetAbi","type":"optional(string)"},
+		{"name":"m_target","type":"optional(address)"},
+		{"name":"_codeBasis","type":"cell"},
+		{"name":"_codeData","type":"cell"},
+		{"name":"_codeIndex","type":"cell"},
+		{"name":"_addrNFTRoot","type":"address"},
+		{"name":"_totalMinted","type":"uint256"},
+		{"name":"_addrMultisig","type":"address"},
+		{"name":"_keyHandle","type":"uint32"},
+		{"name":"_price","type":"uint128"},
+		{"components":[{"name":"addrOwner","type":"address"},{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"tokenCode","type":"string"},{"name":"totalSupply","type":"uint256"},{"name":"index","type":"uint128"},{"name":"part","type":"bytes"}],"name":"_rootParams","type":"tuple"},
+		{"components":[{"name":"addrIndex","type":"address"},{"name":"addrData","type":"address"},{"name":"addrTo","type":"address"}],"name":"_transferParams","type":"tuple"},
+		{"components":[{"name":"creationDate","type":"uint64"},{"name":"comment","type":"string"},{"name":"comment1","type":"string"},{"name":"comment2","type":"string"},{"name":"comment3","type":"string"},{"name":"owner","type":"address"}],"name":"_nftParams","type":"tuple"},
+		{"components":[{"name":"addrData","type":"address"},{"name":"owner","type":"address"}],"name":"_owners","type":"tuple[]"}
+	]
+}

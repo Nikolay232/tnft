@@ -171,6 +171,7 @@ contract NftDebot is Debot, Upgradable {
         }
     }
     function restart() public {
+        Terminal.print(0, format('restart==_keyHandle: {}', _keyHandle));
         if(_keyHandle == 0) {
             uint[] none;
             SigningBoxInput.get(tvm.functionId(setKeyHandle), "Enter keys to sign all operations.", none);
@@ -180,16 +181,18 @@ contract NftDebot is Debot, Upgradable {
         checkContract(_addrNFTRoot);
     }
     function checkContract(address addr) public {
+//        Terminal.print(0, format('checkContract: {}', addr));
         Sdk.getAccountType(tvm.functionId(checkRootContract), addr);
     }
     function checkRootContract(int8 acc_type) public {
         MenuItem[] _items;
+//        Terminal.print(0, format('checkRootContract: {}', acc_type));
         if (acc_type == -1 || acc_type == 0 || acc_type == 2) {
             _items.push(MenuItem("Deploy  Token", "", tvm.functionId(deployRoot)));
         } else {
             _items.push(MenuItem("Mint  Nft", "", tvm.functionId(deployNft)));
-            _items.push(MenuItem("Get all Nft", "", tvm.functionId(getAllNftData)));
-            _items.push(MenuItem("Set burn price", "", tvm.functionId(setBurnPrice)));
+//            _items.push(MenuItem("Get all Nft", "", tvm.functionId(getAllNftData)));
+//            _items.push(MenuItem("Set burn price", "", tvm.functionId(setBurnPrice)));
         }
         Menu.select("==What to do?==", "", _items);
     }
@@ -200,7 +203,7 @@ contract NftDebot is Debot, Upgradable {
         index;
         MenuItem[] items;
         _rootParams.addrOwner = _addrMultisig;
-         _rootParams.part = _surfContent;
+        _rootParams.part = _surfContent;
         if(_rootParams.name == '') {
             items.push(MenuItem("Enter token name:", "", tvm.functionId(rootParamsInputName)));
         }
@@ -279,7 +282,6 @@ contract NftDebot is Debot, Upgradable {
             optional(uint256) none;
             IMultisig(_addrMultisig).sendTransaction {
                 abiVer: 2,
-                extMsg: true,
                 sign: true,
                 pubkey: none,
                 time: 0,
@@ -287,7 +289,7 @@ contract NftDebot is Debot, Upgradable {
                 callbackId: tvm.functionId(onRootDeploySuccess),
                 onErrorId: tvm.functionId(onError),
                 signBoxHandle: _keyHandle
-            }(_addrManager, 0.5 ton, false, 3, payload);
+            }(_addrManager, 0.5 ton, false, 3, payload).extMsg;
         } else {
             MenuItem[] items;
             items.push(MenuItem("Enter token name:", "", tvm.functionId(rootParamsInputName)));
@@ -303,9 +305,10 @@ contract NftDebot is Debot, Upgradable {
         restart();
     }
 
-    //=========================================================================
+    //=======================================MINT NFT==================================
 
     function deployNft(uint32 index) public {
+        Terminal.print(0, format('deployNft: {}', index));
         index;
         resolveNftDataAddr();
         resolveNftAddr();
@@ -358,7 +361,6 @@ contract NftDebot is Debot, Upgradable {
         optional(uint256) none;
         IMultisig(_addrMultisig).sendTransaction {
             abiVer: 2,
-            extMsg: true,
             sign: true,
             pubkey: none,
             time: 0,
@@ -366,92 +368,91 @@ contract NftDebot is Debot, Upgradable {
             callbackId: tvm.functionId(onNftDeploySuccess),
             onErrorId: tvm.functionId(onError),
             signBoxHandle: _keyHandle
-        }(_addrNFTRoot, 2 ton, true, 3, payload);
+        }(_addrNFTRoot, 1.7 ton, true, 3, payload).extMsg;
 
     }
     
     function onNftDeploySuccess() public {
         _totalMinted++;
+        Terminal.print(0, format("===_totalMinted===: {}", _totalMinted));
         restart();
     }
 
     //=========================================================================
 
-    function getAllNftData(uint32 index) public {
-        index;
-        delete _owners;
-        TvmBuilder salt;
-        salt.store(_addrNFTRoot);
-        TvmCell code = tvm.setCodeSalt(_codeData, salt.toCell());
-        uint256 codeHashNftData = tvm.hash(code);
-        Sdk.getAccountsDataByHash(tvm.functionId(getNftDataByHash), codeHashNftData, address(0x0));
-    }
-    function getNftDataByHash(ISdk.AccData[] accounts) public {
-        for (uint i = 0; i < accounts.length; i++)
-        {
-            getNftData(accounts[i].id);
-        }
-        this.printNftData();
-    }
-    function getNftData(address addrData) public {
-        Data(addrData).getOwner{
-            abiVer: 2,
-            extMsg: true,
-            callbackId: tvm.functionId(setNftData),
-            onErrorId: 0,
-            time: 0,
-            expire: 0,
-            sign: false
-        }();
-    }
-    function setNftData(address addrOwner, address addrData) public {
-        _owners.push(NftResp(addrData, addrOwner));
-    }
-    function printNftData() public {
-        for (uint i = 0; i < _owners.length; i++) {
-            string str = _buildNftDataPrint(i, _owners[i].addrData, _owners[i].owner);
-            Terminal.print(0, str);
-        }
-        MenuItem[] items;
-        items.push(MenuItem("Return to main menu:", "", tvm.functionId(mainMenu)));
-        items.push(MenuItem("Burn nft", "", tvm.functionId(burnOneNft)));
-        Menu.select("==What to do?==", "", items);
-    }
-    function _buildNftDataPrint(uint id, address nftData, address ownerAddress) public returns (string str) {
-        str = format("Index: {}\nNft: {}\nOwner: {}\n", id, nftData, ownerAddress);
-    }
+//    function getAllNftData(uint32 index) public {
+//        index;
+//        delete _owners;
+//        TvmBuilder salt;
+//        salt.store(_addrNFTRoot);
+//        TvmCell code = tvm.setCodeSalt(_codeData, salt.toCell());
+//        uint256 codeHashNftData = tvm.hash(code);
+//        Sdk.getAccountsDataByHash(tvm.functionId(getNftDataByHash), codeHashNftData, address(0x0));
+//    }
+//    function getNftDataByHash(ISdk.AccData[] accounts) public {
+//        for (uint i = 0; i < accounts.length; i++)
+//        {
+//            getNftData(accounts[i].id);
+//        }
+//        this.printNftData();
+//    }
+//    function getNftData(address addrData) public {
+//        Data(addrData).getOwner{
+//            abiVer: 2,
+//            callbackId: tvm.functionId(setNftData),
+//            onErrorId: 0,
+//            time: 0,
+//            expire: 0,
+//            sign: false
+//        }().extMsg;
+//    }
+//    function setNftData(address addrOwner, address addrData) public {
+//        _owners.push(NftResp(addrData, addrOwner));
+//    }
+//    function printNftData() public {
+//        for (uint i = 0; i < _owners.length; i++) {
+//            string str = _buildNftDataPrint(i, _owners[i].addrData, _owners[i].owner);
+//            Terminal.print(0, str);
+//        }
+//        MenuItem[] items;
+//        items.push(MenuItem("Return to main menu:", "", tvm.functionId(mainMenu)));
+//        items.push(MenuItem("Burn nft", "", tvm.functionId(burnOneNft)));
+//        Menu.select("==What to do?==", "", items);
+//    }
+//    function _buildNftDataPrint(uint id, address nftData, address ownerAddress) public returns (string str) {
+//        str = format("Index: {}\nNft: {}\nOwner: {}\n", id, nftData, ownerAddress);
+//    }
 
     //==========================================================================
 
-    function setBurnPrice(uint32 index) public {
-        AmountInput.get(tvm.functionId(setBurnPriceStep1), "Enter burn price:", 0, 0, 0xFFFFFFFF);
-    }
-    function setBurnPriceStep1(uint128 value) public {
-        _price = value;
-        this.setBurnPriceStep2();
-    }
-    function setBurnPriceStep2() public {
-        TvmCell payload = tvm.encodeBody(
-            NftRoot.setPrice,
-            _price
-        );
-        optional(uint256) none;
-        IMultisig(_addrMultisig).sendTransaction {
-            abiVer: 2,
-            extMsg: true,
-            sign: true,
-            pubkey: none,
-            time: 0,
-            expire: 0,
-            callbackId: tvm.functionId(onSetPriceSuccess),
-            onErrorId: tvm.functionId(onError),
-            signBoxHandle: _keyHandle
-        }(_addrNFTRoot, 2 ton, true, 3, payload);
-    }
-    function onSetPriceSuccess() public {
-        Terminal.print(0, "Price updated!");
-        restart();
-    }
+//    function setBurnPrice(uint32 index) public {
+//        AmountInput.get(tvm.functionId(setBurnPriceStep1), "Enter burn price:", 0, 0, 0xFFFFFFFF);
+//    }
+//    function setBurnPriceStep1(uint128 value) public {
+//        _price = value;
+//        this.setBurnPriceStep2();
+//    }
+//    function setBurnPriceStep2() public {
+//        TvmCell payload = tvm.encodeBody(
+//            NftRoot.setPrice,
+//            _price
+//        );
+//        optional(uint256) none;
+//        IMultisig(_addrMultisig).sendTransaction {
+//            abiVer: 2,
+//            sign: true,
+//            pubkey: none,
+//            time: 0,
+//            expire: 0,
+//            callbackId: tvm.functionId(onSetPriceSuccess),
+//            onErrorId: tvm.functionId(onError),
+//            signBoxHandle: _keyHandle
+//        }(_addrNFTRoot, 2 ton, true, 3, payload).extMsg;
+//    }
+//    function onSetPriceSuccess() public {
+//        Terminal.print(0, "Price updated!");
+//        restart();
+//    }
 
     //==========================================================================
 
@@ -473,15 +474,14 @@ contract NftDebot is Debot, Upgradable {
         optional(uint256) none;
         IMultisig(_addrMultisig).sendTransaction {
             abiVer: 2,
-            extMsg: true,
             sign: true,
             pubkey: none,
             time: 0,
             expire: 0,
             callbackId: tvm.functionId(onBurnSuccess),
-            onErrorId: tvm.functionId(onError),
+            onErrorId: onError,
             signBoxHandle: _keyHandle
-        }(_addrNFTRoot, 2 ton, true, 3, payload);
+        }(_addrNFTRoot, 2 ton, true, 3, payload).extMsg;
     }
     function onBurnSuccess() public {
         Terminal.print(0, "Burned!");
@@ -496,24 +496,30 @@ contract NftDebot is Debot, Upgradable {
 
     function resolveNFTRoot() public {
         _addrNFTRoot = address.makeAddrStd(0, tvm.hash(makeStateInit()));
+//        Terminal.print(0, format('!!!!!!!!!!!!!!!!!!!resolveNFTRoot: {}', tvm.hash(makeStateInit())));
+//        Terminal.print(0, format('=====resolveNFTRoot: {}=====', tvm.hash(makeStateInit())));
+//        Terminal.print(0, format('resolveNFTRoot: {}', _addrNFTRoot));
     }
     function makeStateInit() public view returns (TvmCell state){
+        TvmCell code = _codeNFTRoot.toSlice().loadRef();
         state = tvm.buildStateInit({
             contr: NftRoot,
             varInit: {
                 _addrOwner: _addrMultisig
             },
-            code: _codeNFTRoot
+//            code: _codeNFTRoot
+            code: code
         });
     }
 
     function resolveNftDataAddr() public {
         TvmBuilder salt;
         salt.store(_addrNFTRoot);
-        TvmCell codeData = tvm.setCodeSalt(_codeData, salt.toCell());
+        TvmCell codeData = tvm.setCodeSalt(_codeData.toSlice().loadRef(), salt.toCell());
         TvmCell stateNftData = tvm.buildStateInit({
             contr: Data,
-            varInit: {_id: _totalMinted},
+//            PRINT============================================================================================================
+            varInit: {_id: 11+_totalMinted},
             code: codeData
         });
         uint256 hashStateNftData = tvm.hash(stateNftData);
@@ -524,7 +530,7 @@ contract NftDebot is Debot, Upgradable {
         TvmBuilder salt;
         salt.store(_addrNFTRoot);
         salt.store(_addrMultisig);
-        TvmCell codeIndex = tvm.setCodeSalt(_codeIndex, salt.toCell());
+        TvmCell codeIndex = tvm.setCodeSalt(_codeIndex.toSlice().loadRef(), salt.toCell());
         TvmCell stateNft = tvm.buildStateInit({
             contr: Index,
             varInit: {_addrData: _transferParams.addrData},
@@ -562,12 +568,15 @@ contract NftDebot is Debot, Upgradable {
     }
 
     function saveMultisig(address value) public {
+        Terminal.print(0, format('saveMultisig: {}', value));
         _addrMultisig = value;
+        Terminal.print(0, format('_addrMultisig: {}', _addrMultisig));
         restart();
     }
 
     function setKeyHandle(uint32 handle) public {
-            Terminal.print(0, 'You need to attach Multisig');
+        Terminal.print(0, 'You need to attach Multisig');
+        Terminal.print(0, format('_keyHandle: {}', handle));
         _keyHandle = handle;
         restart();
     }

@@ -35,7 +35,7 @@ contract IndexResolver {
         TvmBuilder salt;
         salt.store(addrRoot);
         salt.store(addrOwner);
-        return tvm.setCodeSalt(_codeIndex, salt.toCell());
+        return tvm.setCodeSalt(_codeIndex.toSlice().loadRef(), salt.toCell());
     }
 
     function _buildIndexState(
@@ -45,6 +45,7 @@ contract IndexResolver {
         return tvm.buildStateInit({
             contr: Index,
             varInit: {_addrData: addrData},
+//            code: code.toSlice().loadRef()
             code: code
         });
     }

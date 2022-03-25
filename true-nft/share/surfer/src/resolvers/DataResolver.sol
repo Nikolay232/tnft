@@ -27,7 +27,7 @@ contract DataResolver {
     function _buildDataCode(address addrRoot) internal virtual view returns (TvmCell) {
         TvmBuilder salt;
         salt.store(addrRoot);
-        return tvm.setCodeSalt(_codeData, salt.toCell());
+        return tvm.setCodeSalt(_codeData.toSlice().loadRef(), salt.toCell());
     }
 
     function _buildDataState(
@@ -37,6 +37,7 @@ contract DataResolver {
         return tvm.buildStateInit({
             contr: Data,
             varInit: {_id: id},
+//            code: code.toSlice().loadRef()
             code: code
         });
     }

@@ -1,0 +1,41 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"rootCode","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployRoot",
+			"inputs": [
+				{"name":"addrOwner","type":"address"},
+				{"name":"codeIndex","type":"cell"},
+				{"name":"codeData","type":"cell"},
+				{"name":"name","type":"string"},
+				{"name":"description","type":"string"},
+				{"name":"tokenCode","type":"string"},
+				{"name":"totalSupply","type":"uint256"},
+				{"name":"index","type":"uint128"},
+				{"name":"part","type":"bytes"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_rootCode","type":"cell"}
+	]
+}

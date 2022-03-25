@@ -57,14 +57,15 @@ contract NftRoot is DataResolver, IndexResolver {
 
         _content[index] = part;
         
-        _price = 1 ton;
+        _price = 0.63 ton;
     }
 
     function mintNft(uint64 creationDate, string comment, address owner) public onlyOwner {
         require(msg.value >= 1.6 ton, Errors.ERROR_NOT_ENOUGH_GRAMS);
         require(_totalMinted <= _totalSupply, Errors.ERROR_MINTED_TOO_MUCH);
         TvmCell codeData = _buildDataCode(address(this));
-        TvmCell stateData = _buildDataState(codeData, _totalMinted);
+//        PRINT============================================================================================================
+        TvmCell stateData = _buildDataState(codeData, 11+_totalMinted);
         new Data
             {stateInit: stateData, value: 1.5 ton} (
                 owner,
